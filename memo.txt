@@ -1,0 +1,15 @@
+コマンド手順
+npx create-react-app frontend --template typescript
+truffle init
+code .
+
+フォルダ説明
+contracts 
+.. contractを格納
+migrations
+.. デプロイの順番、デプロイの情報をJSで書く。
+test
+.. テストをJSで書く
+
+ERC20参考サイト
+https://ethereum.org/en/developers/docs/standards/tokens/erc-20/
