@@ -23,6 +23,9 @@ contract ERC20{
         // 渡さないと誰もこのトークンを持ってないことになる
         // デプロイ時にtotalSuoply分のトークンをゲット！
         balances[msg.sender] += totalSupply;
+        // deploy時にmsg.senderにtotalSupply分のトークンをMintしてるからemitが必要
+        // Mintする際は差出人はadress(0)にする
+        emit Transfer(address(0), msg.sender, totalSupply);
     }
 
     function balanceOf(address _owner) external view returns (uint256) {

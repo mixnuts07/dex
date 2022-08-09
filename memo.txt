@@ -15,6 +15,11 @@ ERC20参考サイト
 https://ethereum.org/en/developers/docs/standards/tokens/erc-20/
 
 
+--
+truffle compile .. コンパイル  (buildフォルダ生成)
+truffle develop → migrate → デプロイ (migrationsファイル参照してデプロイ)
+--
+
 ・truffle compile 後に生成される build/contracts/*.json は
 interfaceがjson化した様なもの
 フロントエンドでブロックチェーンと繋げるときに使われる！
@@ -55,3 +60,15 @@ truffle.config.jsの
      network_id: "*",       // Any network (default: none)
     },
 と、GanacheのRPC Serverを合わせる。（host / port ）
+
+下でTruffleでデプロイしたブロックチェーンとGanacheが連携？　Ganache側できちんとEthが減っている！！
+--
+truffle console
+→
+migrate
+--
+
+--
+test.js をテストするコマンド
+test
+--
