@@ -13,3 +13,8 @@ test
 
 ERC20参考サイト
 https://ethereum.org/en/developers/docs/standards/tokens/erc-20/
+
+
+・truffle compile 後に生成される build/contracts/*.json は
+interfaceがjson化した様なもの
+フロントエンドでブロックチェーンと繋げるときに使われる！
