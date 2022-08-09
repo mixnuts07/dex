@@ -1,38 +1,67 @@
-.App {
-  text-align: center;
+html {
+  background: rgb(18, 11, 124);
+  background: radial-gradient(
+    circle,
+    rgba(18, 11, 124, 1) 0%,
+    rgba(188, 124, 236, 0.8) 48%,
+    rgba(18, 11, 124, 1) 100%
+  );
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.content {
+  background: rgb(18, 11, 124);
+  background: radial-gradient(
+    circle,
+    rgba(18, 11, 124, 1) 0%,
+    rgba(188, 124, 236, 0.8) 48%,
+    rgba(18, 11, 124, 1) 100%
+  );
   min-height: 100vh;
+  max-width: 100vw;
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  font-size: calc(10px + 2vmin);
+}
+/* -- Header -- */
+header {
+  min-height: 10vh;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+}
+.header-title {
+  padding-left: 50px;
+  text-align: center;
+  color: rgb(211, 221, 230);
+}
+.connect-wallet {
+  height: 70px;
+  width: 200px;
+  margin: 25px 50px 0px 0px;
+  color: rgb(18, 11, 124);
+  padding: 0px;
+  border-radius: 10px;
+  font-size: 20px;
+  color: rgb(211, 221, 230);
+  background-color: rgb(157, 53, 15);
+}
+
+/* --form-- */
+.form-input {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-color: rgba(74, 54, 54, 0.5);
+  width: 30vw;
 }
-
-.App-link {
-  color: #61dafb;
+.rate {
+  display: flex;
+  flex-direction: row;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* --footer-- */
+.wallet {
+  align-self: flex-end;
+  text-align: center;
+  color: aliceblue;
 }
