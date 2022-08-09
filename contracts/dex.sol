@@ -15,13 +15,15 @@ contract Dex{
         require(supportedTokenAddr[_tokenAddr] == true, "This Token Is Not Supported");
         _;
     }
-    // _tokenAddr はコントラクト呼び出し時に対応するトークンのアドレスを格納した配列が渡される
+    // _tokenAddr はdeploy時に対応するトークンのアドレスを格納した配列が渡される
+    // [dai.address, link.address, comp.address]
     constructor (address[] memory _tokenAddr){
         for (uint i=0; i < _tokenAddr.length; i++){
             supportedTokenAddr[_tokenAddr[i]] = true;
         }
     }
     // EthをDexコントラクトに送るから、payableが必要
+    // payable関数では読み出すときに引数に{from:, value:, }必要
     function buyToken(address _tokenAddr, uint256 _cost, uint256 _amount) external payable suppoertsToken(_tokenAddr){
         // インスタンスの型の名前はコントラクトの名前と同じになる
         ERC20 token = ERC20(_tokenAddr);

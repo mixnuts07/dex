@@ -21,6 +21,7 @@ contract ERC20{
         symbol = _symbol;
         totalSupply = _totalSupply;
         // 渡さないと誰もこのトークンを持ってないことになる
+        // デプロイ時にtotalSuoply分のトークンをゲット！
         balances[msg.sender] += totalSupply;
     }
 
