@@ -58,31 +58,35 @@ const SelectTextFields = () => {
 
 function App() {
   return (
-    <div className="content">
-      <header>
-        <h3 className="header-title">TOKEN SWAP</h3>
-        <button className="connect-wallet">Connect Wallet</button>
-      </header>
-      <div className="form-input">
-        <div className="input-first">
+    <Box component="div" className="content">
+      <Box component="header">
+        <Box component="h3" className="header-title">
+          TOKEN SWAP
+        </Box>
+        <Button className="connect-wallet">Connect Wallet</Button>
+      </Box>
+      <Box component="div" className="form-input">
+        <Box component="div" className="input-first">
           <input type="text" />
           <SelectTextFields />
-        </div>
-        <button>↓</button>
-        <div className="input-to">
+        </Box>
+        <Button>↓</Button>
+        <Box component="div" className="input-to">
           <input type="text" />
           <SelectTextFields />
-        </div>
-        <div className="rate">
-          <h6>Exchange Rate :</h6>
-          <h5>1 ETH = 3000DAI</h5>
-        </div>
-        <button>Connect Wallet</button>
-      </div>
-      <footer>
-        <h5 className="wallet">0x0000</h5>
-      </footer>
-    </div>
+        </Box>
+        <Box component="div" className="rate">
+          <Box component="h6">Exchange Rate :</Box>
+          <Box component="h5">1 ETH = 3000DAI</Box>
+        </Box>
+        <Button>Connect Wallet</Button>
+      </Box>
+      <Box component="footer">
+        <Box component="h5" className="wallet">
+          0x0000
+        </Box>
+      </Box>
+    </Box>
   );
 }
 
