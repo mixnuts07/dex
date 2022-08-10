@@ -55,42 +55,6 @@ const SelectTextFields = () => {
     </Box>
   );
 };
-//--
-const FormPropsTextFields = () => {
-  return (
-    <Box
-      component="form"
-      sx={{
-        "& .MuiTextField-root": { m: 1, width: "25ch" },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <TextField
-        id="standard-number"
-        label="ETH"
-        type="number"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        variant="standard"
-        defaultValue="0"
-        color="success"
-      />
-      <TextField
-        disabled
-        id="standard-number"
-        label="SELECT TOKEN"
-        type="number"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        variant="standard"
-      />
-    </Box>
-  );
-};
-// --
 
 const CssTextField = styled(TextField)({
   "& label.Mui-focused": {
@@ -104,7 +68,7 @@ const CssTextField = styled(TextField)({
       borderColor: "whitesmoke",
     },
     "&:hover fieldset": {
-      borderColor: "yellow",
+      borderColor: "whitesmoke",
     },
     "&.Mui-focused fieldset": {
       borderColor: "green",
@@ -118,12 +82,27 @@ const CustomizedInputs = () => {
       component="form"
       noValidate
       sx={{
-        display: "grid",
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
         gridTemplateColumns: { sm: "1fr 1fr" },
         gap: 2,
+        width: "30vw",
+        height: "40vh",
+        backgroundColor: "red",
+        margin: "auto",
+        padding: "2em",
+        borderRadius: "2em",
       }}
     >
-      <CssTextField label="ETH" id="custom-css-outlined-input" />
+      <Box component="div" sx={{ display: "flex", flexDirection: "row" }}>
+        <CssTextField label="ETH" id="custom-css-outlined-input" />
+        <SelectTextFields />
+      </Box>
+      <Box component="div" sx={{ display: "flex", flexDirection: "row" }}>
+        <CssTextField label="SELECT TOKEN" id="custom-css-outlined-input" />
+        <SelectTextFields />
+      </Box>
     </Box>
   );
 };
@@ -155,7 +134,7 @@ const App = () => {
       </Box> */}
       <CustomizedInputs />
       {/* <SelectTextFields /> */}
-      <FormPropsTextFields />
+
       <Box component="footer">
         <Box component="h5" className="wallet">
           0x0000
