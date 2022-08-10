@@ -4,7 +4,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-
+import { styled } from "@mui/material/styles";
+// --
 const currencies = [
   {
     value: "dai",
@@ -19,7 +20,6 @@ const currencies = [
     label: "COMP",
   },
 ];
-
 const SelectTextFields = () => {
   const [currency, setCurrency] = React.useState("");
 
@@ -55,8 +55,80 @@ const SelectTextFields = () => {
     </Box>
   );
 };
+//--
+const FormPropsTextFields = () => {
+  return (
+    <Box
+      component="form"
+      sx={{
+        "& .MuiTextField-root": { m: 1, width: "25ch" },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <TextField
+        id="standard-number"
+        label="ETH"
+        type="number"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        variant="standard"
+        defaultValue="0"
+        color="success"
+      />
+      <TextField
+        disabled
+        id="standard-number"
+        label="SELECT TOKEN"
+        type="number"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        variant="standard"
+      />
+    </Box>
+  );
+};
+// --
 
-function App() {
+const CssTextField = styled(TextField)({
+  "& label.Mui-focused": {
+    color: "green",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "green",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "whitesmoke",
+    },
+    "&:hover fieldset": {
+      borderColor: "yellow",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "green",
+    },
+  },
+});
+
+const CustomizedInputs = () => {
+  return (
+    <Box
+      component="form"
+      noValidate
+      sx={{
+        display: "grid",
+        gridTemplateColumns: { sm: "1fr 1fr" },
+        gap: 2,
+      }}
+    >
+      <CssTextField label="ETH" id="custom-css-outlined-input" />
+    </Box>
+  );
+};
+
+const App = () => {
   return (
     <Box component="div" className="content">
       <Box component="header">
@@ -65,7 +137,7 @@ function App() {
         </Box>
         <Button className="connect-wallet">Connect Wallet</Button>
       </Box>
-      <Box component="div" className="form-input">
+      {/* <Box component="div" className="form-input">
         <Box component="div" className="input-first">
           <input type="text" />
           <SelectTextFields />
@@ -80,7 +152,10 @@ function App() {
           <Box component="h5">1 ETH = 3000DAI</Box>
         </Box>
         <Button>Connect Wallet</Button>
-      </Box>
+      </Box> */}
+      <CustomizedInputs />
+      {/* <SelectTextFields /> */}
+      <FormPropsTextFields />
       <Box component="footer">
         <Box component="h5" className="wallet">
           0x0000
@@ -88,6 +163,6 @@ function App() {
       </Box>
     </Box>
   );
-}
+};
 
 export default App;
