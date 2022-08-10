@@ -2,7 +2,7 @@
   background-color: rgb(37, 35, 35);
 } */
 .content {
-  background: rgb(18, 11, 124);
+  background: #120b7c;
   background: radial-gradient(
     circle,
     rgba(18, 11, 124, 1) 0%,
@@ -19,7 +19,7 @@
 /* -- Header -- */
 header {
   min-height: 10vh;
-  max-width: 60vw;
+  max-width: 50vw;
   padding-top: 2rem;
   display: flex;
   justify-content: space-between;
