@@ -66,6 +66,8 @@ truffle.config.jsの
 truffle console
 →
 migrate
+再デプロイ
+migrate --reset
 --
 
 --

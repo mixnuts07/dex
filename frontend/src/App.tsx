@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -11,7 +11,7 @@ import imageEth from "./Images/ETH.png";
 import imageDai from "./Images/DAI.png";
 import imageLink from "./Images/link.png";
 import imageComp from "./Images/comp.png";
-import { setTokenSourceMapRange } from "typescript";
+import { ethers } from "ethers";
 
 // --
 const currencies = [
@@ -165,7 +165,7 @@ const CustomizedInputs = () => {
         <CssTextField
           label="0.00"
           id="custom-css-outlined-input"
-          sx={{ minWidth: "24vw" }}
+          sx={{ minWidth: "24vw", backgroundColor: "rgb(256,00,00)" }}
         />
         {token ? (
           <EthToken />
@@ -242,7 +242,94 @@ const Footer = () => {
   );
 };
 
+const Ethers = () => {
+  // const [currentAccount, setCurrentAccount] = useState("");
+  // const checkIfWalletIsConnected = async () => {
+  //   console.log("currentAccount: ", currentAccount);
+  //   try {
+  //     const { ethereum } = window;
+  //     if (!ethereum) {
+  //       console.log("Make sure you have MetaMask!");
+  //       return;
+  //     } else {
+  //       console.log("We have the ethereum object", ethereum);
+  //     }
+  //     // ユーザーのウォレットへのアクセスが許可されているかどうかを確認します。
+  //     const accounts = await ethereum.request({ method: "eth_accounts" });
+  //     if (accounts.length !== 0) {
+  //       const account = accounts[0];
+  //       console.log("Found an authorized account:", account);
+  //       setCurrentAccount(account);
+  //     } else {
+  //       console.log("No authorized account found");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // // connectWalletメソッドを実装
+  // const connectWallet = async () => {
+  //   try {
+  //     const { ethereum } = window;
+  //     if (!ethereum) {
+  //       alert("Get MetaMask!");
+  //       return;
+  //     }
+  //     const accounts = await ethereum.request({
+  //       method: "eth_requestAccounts",
+  //     });
+  //     console.log("Connected: ", accounts[0]);
+  //     setCurrentAccount(accounts[0]);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+};
 const App = () => {
+  const [currentAccount, setCurrentAccount] = useState("");
+  const checkIfWalletIsConnected = async () => {
+    console.log("currentAccount: ", currentAccount);
+    try {
+      const { ethereum } = window;
+      if (!ethereum) {
+        console.log("Make sure you have MetaMask!");
+        return;
+      } else {
+        console.log("We have the ethereum object", ethereum);
+      }
+      // ユーザーのウォレットへのアクセスが許可されているかどうかを確認します。
+      const accounts = await ethereum.request({ method: "eth_accounts" });
+      if (accounts.length !== 0) {
+        const account = accounts[0];
+        console.log("Found an authorized account:", account);
+        setCurrentAccount(account);
+      } else {
+        console.log("No authorized account found");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // connectWalletメソッドを実装
+  const connectWallet = async () => {
+    try {
+      const { ethereum } = window;
+      if (!ethereum) {
+        alert("Get MetaMask!");
+        return;
+      }
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log("Connected: ", accounts[0]);
+      setCurrentAccount(accounts[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    checkIfWalletIsConnected();
+  }, []);
   return (
     <Box component="div" className="content">
       <Header />
