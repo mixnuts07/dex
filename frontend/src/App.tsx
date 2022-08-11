@@ -125,7 +125,7 @@ const SelectTextFields = ({ currency, handleCurrency }) => {
   );
 };
 
-const CustomizedInputs = () => {
+const CustomizedInputs = ({ connectWallet, currentAccount }) => {
   const [token, setToken] = useState(true);
   const handleToken = () => {
     setToken(!token);
@@ -197,6 +197,7 @@ const CustomizedInputs = () => {
         }}
       >
         <CssTextField
+          disabled={true}
           label="0.00"
           id="custom-css-outlined-input"
           sx={{ minWidth: "24vw" }}
@@ -220,6 +221,7 @@ const CustomizedInputs = () => {
       </Box>
       <Button
         variant="contained"
+        onClick={connectWallet}
         sx={{
           width: "200px",
           height: "200px",
@@ -232,59 +234,16 @@ const CustomizedInputs = () => {
   );
 };
 
-const Footer = () => {
+const Footer = ({ currentAccount }) => {
   return (
     <Box component="footer" sx={{ marginTop: "3em" }}>
       <Box component="h5" className="wallet">
-        LOGIN ADDRESS : 0x0000
+        LOGIN ADDRESS : {currentAccount}
       </Box>
     </Box>
   );
 };
 
-const Ethers = () => {
-  // const [currentAccount, setCurrentAccount] = useState("");
-  // const checkIfWalletIsConnected = async () => {
-  //   console.log("currentAccount: ", currentAccount);
-  //   try {
-  //     const { ethereum } = window;
-  //     if (!ethereum) {
-  //       console.log("Make sure you have MetaMask!");
-  //       return;
-  //     } else {
-  //       console.log("We have the ethereum object", ethereum);
-  //     }
-  //     // ユーザーのウォレットへのアクセスが許可されているかどうかを確認します。
-  //     const accounts = await ethereum.request({ method: "eth_accounts" });
-  //     if (accounts.length !== 0) {
-  //       const account = accounts[0];
-  //       console.log("Found an authorized account:", account);
-  //       setCurrentAccount(account);
-  //     } else {
-  //       console.log("No authorized account found");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // // connectWalletメソッドを実装
-  // const connectWallet = async () => {
-  //   try {
-  //     const { ethereum } = window;
-  //     if (!ethereum) {
-  //       alert("Get MetaMask!");
-  //       return;
-  //     }
-  //     const accounts = await ethereum.request({
-  //       method: "eth_requestAccounts",
-  //     });
-  //     console.log("Connected: ", accounts[0]);
-  //     setCurrentAccount(accounts[0]);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-};
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const checkIfWalletIsConnected = async () => {
@@ -333,8 +292,11 @@ const App = () => {
   return (
     <Box component="div" className="content">
       <Header />
-      <CustomizedInputs />
-      <Footer />
+      <CustomizedInputs
+        connectWallet={connectWallet}
+        currentAccount={currentAccount}
+      />
+      <Footer currentAccount={currentAccount} />
     </Box>
   );
 };
