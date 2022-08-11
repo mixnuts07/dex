@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -6,22 +6,29 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
+import imageEth from "./Images/ETH.png";
+import imageDai from "./Images/DAI.png";
+import imageLink from "./Images/link.png";
+import imageComp from "./Images/comp.png";
+import { setTokenSourceMapRange } from "typescript";
 
 // --
 const currencies = [
   {
-    value: "dai",
+    value: "DAI",
     label: "DAI",
   },
   {
-    value: "link",
+    value: "LINK",
     label: "LINK",
   },
   {
-    value: "comp",
+    value: "COMP",
     label: "COMP",
   },
 ];
+
 const CssTextField = styled(TextField)({
   "& label.Mui-focused": {
     color: "green",
@@ -54,21 +61,43 @@ const Header = () => {
     </Box>
   );
 };
-
-const SelectTextFields = () => {
-  const [currency, setCurrency] = React.useState("");
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrency(event.target.value);
-  };
-
+const ImageCrypto = () => {
+  return (
+    <Avatar alt="ETH Image" src={imageEth} sx={{ width: 56, height: 56 }} />
+  );
+};
+const EthToken = () => {
+  return (
+    <Box
+      component="div"
+      sx={{
+        m: 1,
+        width: "8vw",
+        height: "5vh",
+        marginLeft: "1em",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        color: "whitesmoke",
+        borderRadius: "8px",
+        top: "100",
+      }}
+    >
+      <ImageCrypto />
+      <Typography variant="h5">ETH</Typography>
+    </Box>
+  );
+};
+const SelectTextFields = ({ currency, handleCurrency }) => {
   return (
     <Box
       component="form"
       sx={{
         "& .MuiTextField-root": {
           m: 1,
-          minWidth: "8vw",
+          width: "8vw",
+          height: "3vh",
           bottom: "8px",
           marginLeft: "1em",
         },
@@ -82,7 +111,7 @@ const SelectTextFields = () => {
           select
           label="Select"
           value={currency}
-          onChange={handleChange}
+          onChange={handleCurrency}
           // helperText="Please select your currency"
         >
           {currencies.map((option) => (
@@ -97,6 +126,14 @@ const SelectTextFields = () => {
 };
 
 const CustomizedInputs = () => {
+  const [token, setToken] = useState(true);
+  const handleToken = () => {
+    setToken(!token);
+  };
+  const [currency, setCurrency] = useState("");
+  const handleCurrency = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrency(event.target.value);
+  };
   return (
     <Box
       component="form"
@@ -126,11 +163,18 @@ const CustomizedInputs = () => {
         }}
       >
         <CssTextField
-          label="ETH"
+          label="0.00"
           id="custom-css-outlined-input"
           sx={{ minWidth: "24vw" }}
         />
-        <SelectTextFields />
+        {token ? (
+          <EthToken />
+        ) : (
+          <SelectTextFields
+            currency={currency}
+            handleCurrency={handleCurrency}
+          />
+        )}
       </Box>
       <Button
         variant="contained"
@@ -140,8 +184,9 @@ const CustomizedInputs = () => {
           color: "black",
           fontWeight: "bold",
         }}
+        onClick={handleToken}
       >
-        ↓
+        ⇅
       </Button>
       <Box
         component="div"
@@ -152,18 +197,25 @@ const CustomizedInputs = () => {
         }}
       >
         <CssTextField
-          label="SELECT TOKEN"
+          label="0.00"
           id="custom-css-outlined-input"
           sx={{ minWidth: "24vw" }}
         />
-        <SelectTextFields />
+        {token ? (
+          <SelectTextFields
+            currency={currency}
+            handleCurrency={handleCurrency}
+          />
+        ) : (
+          <EthToken />
+        )}
       </Box>
       <Box component="div" className="rate" sx={{ height: "30px" }}>
         <Typography variant="h6" component="div">
           Exchange Rate :
         </Typography>
-        <Typography variant="h5" component="div">
-          1 ETH = 3000DAI
+        <Typography variant="h5" component="div" sx={{ fontSize: "20px" }}>
+          1 ETH = 3000{currency}
         </Typography>
       </Box>
       <Button
