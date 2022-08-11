@@ -5,6 +5,8 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { styled } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+
 // --
 const currencies = [
   {
@@ -46,7 +48,9 @@ const Header = () => {
       <Box component="h3" className="header-title">
         TOKEN SWAP
       </Box>
-      <Button className="connect-wallet">Connect Wallet</Button>
+      <Button className="connect-wallet" variant="contained">
+        Connect Wallet
+      </Button>
     </Box>
   );
 };
@@ -62,7 +66,12 @@ const SelectTextFields = () => {
     <Box
       component="form"
       sx={{
-        "& .MuiTextField-root": { m: 1, width: "5em" },
+        "& .MuiTextField-root": {
+          m: 1,
+          minWidth: "8vw",
+          bottom: "8px",
+          marginLeft: "1em",
+        },
       }}
       noValidate
       autoComplete="off"
@@ -74,7 +83,7 @@ const SelectTextFields = () => {
           label="Select"
           value={currency}
           onChange={handleChange}
-          helperText="Please select your currency"
+          // helperText="Please select your currency"
         >
           {currencies.map((option) => (
             <MenuItem key={option.value} value={option.value}>
@@ -102,7 +111,7 @@ const CustomizedInputs = () => {
         width: "30vw",
         height: "40vh",
         backgroundColor: "rgba(51, 29, 29, 0.1)",
-        margin: "3em auto",
+        margin: "3em auto 0em auto",
         padding: "2em",
         borderRadius: "2em",
       }}
@@ -113,22 +122,60 @@ const CustomizedInputs = () => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
-          paddingTop: "8em",
+          marginTop: "3em",
         }}
       >
-        <CssTextField label="ETH" id="custom-css-outlined-input" />
+        <CssTextField
+          label="ETH"
+          id="custom-css-outlined-input"
+          sx={{ minWidth: "24vw" }}
+        />
         <SelectTextFields />
       </Box>
-      <Button>↓</Button>
-      <Box component="div" sx={{ display: "flex", flexDirection: "row" }}>
-        <CssTextField label="SELECT TOKEN" id="custom-css-outlined-input" />
+      <Button
+        variant="contained"
+        sx={{
+          marginTop: "0vh",
+          backgroundColor: "white",
+          color: "black",
+          fontWeight: "bold",
+        }}
+      >
+        ↓
+      </Button>
+      <Box
+        component="div"
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+        }}
+      >
+        <CssTextField
+          label="SELECT TOKEN"
+          id="custom-css-outlined-input"
+          sx={{ minWidth: "24vw" }}
+        />
         <SelectTextFields />
       </Box>
-      <Box component="div" className="rate">
-        <Box component="h6">Exchange Rate :</Box>
-        <Box component="h5">1 ETH = 3000DAI</Box>
+      <Box component="div" className="rate" sx={{ height: "30px" }}>
+        <Typography variant="h6" component="div">
+          Exchange Rate :
+        </Typography>
+        <Typography variant="h5" component="div">
+          1 ETH = 3000DAI
+        </Typography>
       </Box>
-      <Button>Connect Wallet</Button>
+      <Button
+        variant="contained"
+        sx={{
+          width: "200px",
+          height: "200px",
+          marginTop: "0",
+        }}
+      >
+        Connect Wallet
+      </Button>
     </Box>
   );
 };
