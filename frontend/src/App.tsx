@@ -104,10 +104,6 @@ const EthToken = () => {
   );
 };
 const SelectTextFields = ({ currency, handleCurrency }) => {
-  const [selectedToken, setSelectedToken] = useState("");
-  const handleToken = (value) => {
-    setSelectedToken(value);
-  };
   return (
     <Box
       component="form"
@@ -133,11 +129,7 @@ const SelectTextFields = ({ currency, handleCurrency }) => {
           // helperText="Please select your currency"
         >
           {currencies.map((option) => (
-            <MenuItem
-              key={option.value}
-              value={option.value}
-              onClick={() => handleToken(option.value)}
-            >
+            <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>
           ))}
@@ -148,7 +140,12 @@ const SelectTextFields = ({ currency, handleCurrency }) => {
   );
 };
 
-const CustomizedInputs = ({ currentAccount, connectWallet, priceData }) => {
+const CustomizedInputs = ({
+  currentAccount,
+  connectWallet,
+  priceData,
+  getApiPrice,
+}) => {
   const [token, setToken] = useState(true);
   const handleToken = () => {
     setToken(!token);
@@ -159,6 +156,37 @@ const CustomizedInputs = ({ currentAccount, connectWallet, priceData }) => {
   };
   const [inputEthPrice, setInputEthPrice] = useState(0.0);
   const [inputTokenPrice, setInputTokenPrice] = useState(0.0);
+  // トークンをレンダーする
+  const TokenRender = () => {
+    switch (currency) {
+      case "DAI":
+        return (
+          <Box component="h5">
+            {Math.floor(
+              (inputEthPrice / Number(getApiPrice["daiETH"])) * 1000
+            ) / 1000}
+          </Box>
+        );
+      case "LINK":
+        return (
+          <Box component="h5">
+            {Math.floor(
+              (inputEthPrice / Number(getApiPrice["linkETH"])) * 1000
+            ) / 1000}
+          </Box>
+        );
+      case "COMP":
+        return (
+          <Box component="h5">
+            {Math.floor(
+              (inputEthPrice / Number(getApiPrice["compETH"])) * 1000
+            ) / 1000}
+          </Box>
+        );
+      default:
+        return <Box component="div"></Box>;
+    }
+  };
   return (
     <Box
       component="form"
@@ -244,9 +272,20 @@ const CustomizedInputs = ({ currentAccount, connectWallet, priceData }) => {
           <Typography variant="h6" component="div">
             Exchange Rate :
           </Typography>
-          <Typography variant="h5" component="div" sx={{ fontSize: "20px" }}>
-            {inputEthPrice} ETH = 3000{currency}
-          </Typography>
+          <Box component="div">
+            <Typography
+              variant="h5"
+              component="div"
+              sx={{
+                fontSize: "20px",
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              {inputEthPrice} ETH = <TokenRender />
+              {currency}
+            </Typography>
+          </Box>
         </Box>
       )}
       {currentAccount ? (
@@ -266,13 +305,20 @@ const CustomizedInputs = ({ currentAccount, connectWallet, priceData }) => {
           sx={{
             width: "200px",
             height: "200px",
-            marginTop: "0",
+            marginTop: "60px",
           }}
           onClick={connectWallet}
         >
           Connect Wallet
         </Button>
       )}
+      {/* <Box component="ul">
+        {Object.keys(getApiPrice).map((key) => (
+          <Box component="li" key={key}>
+            {key} :{Number(getApiPrice[key])}
+          </Box>
+        ))}
+      </Box> */}
     </Box>
   );
 };
@@ -317,11 +363,7 @@ const App = () => {
   const [getApiPrice, setGetApiPrice] = useState({});
   const RenderPrice = async () => {
     priceData = await GetPrice();
-    console.log("RenderPrice");
-    console.dir(priceData);
     setGetApiPrice(priceData);
-    console.log("priceDate");
-    console.log(priceData);
   };
   // ユーザがWalletを所要しているか確認
   const CheckWalletIsConnected = async () => {
@@ -363,8 +405,6 @@ const App = () => {
   };
   useEffect(() => {
     RenderPrice();
-    // console.log("priceData");
-    // console.dir(priceData);
     CheckWalletIsConnected();
   }, []);
   return (
@@ -374,15 +414,9 @@ const App = () => {
         currentAccount={currentAccount}
         connectWallet={connectWallet}
         priceData={priceData}
+        getApiPrice={getApiPrice}
       />
       <Footer currentAccount={currentAccount} />
-      <Box component="ul">
-        {Object.keys(getApiPrice).map((key) => (
-          <Box component="li" key={key}>
-            {getApiPrice[key]}
-          </Box>
-        ))}
-      </Box>
     </Box>
   );
 };
