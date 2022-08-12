@@ -13,6 +13,7 @@ import imageLink from "./Images/link.png";
 import imageComp from "./Images/comp.png";
 import { ethers } from "ethers";
 
+let priceData;
 // --
 const currencies = [
   {
@@ -48,6 +49,9 @@ const CssTextField = styled(TextField)({
     },
   },
 });
+
+// 選択したトークンを保存〜〜
+// let selectedToken = undefined
 
 const Header = ({ currentAccount, connectWallet }) => {
   return (
@@ -100,6 +104,10 @@ const EthToken = () => {
   );
 };
 const SelectTextFields = ({ currency, handleCurrency }) => {
+  const [selectedToken, setSelectedToken] = useState("");
+  const handleToken = (value) => {
+    setSelectedToken(value);
+  };
   return (
     <Box
       component="form"
@@ -125,17 +133,22 @@ const SelectTextFields = ({ currency, handleCurrency }) => {
           // helperText="Please select your currency"
         >
           {currencies.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
+            <MenuItem
+              key={option.value}
+              value={option.value}
+              onClick={() => handleToken(option.value)}
+            >
               {option.label}
             </MenuItem>
           ))}
         </CssTextField>
       </div>
+      {/* <Box component="h5">{selectedToken}</Box> */}
     </Box>
   );
 };
 
-const CustomizedInputs = ({ currentAccount, connectWallet }) => {
+const CustomizedInputs = ({ currentAccount, connectWallet, priceData }) => {
   const [token, setToken] = useState(true);
   const handleToken = () => {
     setToken(!token);
@@ -144,6 +157,8 @@ const CustomizedInputs = ({ currentAccount, connectWallet }) => {
   const handleCurrency = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrency(event.target.value);
   };
+  const [inputEthPrice, setInputEthPrice] = useState(0.0);
+  const [inputTokenPrice, setInputTokenPrice] = useState(0.0);
   return (
     <Box
       component="form"
@@ -173,8 +188,10 @@ const CustomizedInputs = ({ currentAccount, connectWallet }) => {
         }}
       >
         <CssTextField
-          label="0.00"
+          label="Input Price"
           id="custom-css-outlined-input"
+          defaultValue={inputEthPrice}
+          onChange={(event) => setInputEthPrice(Number(event.target.value))}
           sx={{ minWidth: "24vw" }}
         />
         {token ? (
@@ -208,9 +225,10 @@ const CustomizedInputs = ({ currentAccount, connectWallet }) => {
       >
         <CssTextField
           disabled={true}
-          label="0.00"
+          label="Input Price"
           id="custom-css-outlined-input"
           sx={{ minWidth: "24vw" }}
+          defaultValue={inputTokenPrice}
         />
         {token ? (
           <SelectTextFields
@@ -221,14 +239,16 @@ const CustomizedInputs = ({ currentAccount, connectWallet }) => {
           <EthToken />
         )}
       </Box>
-      <Box component="div" className="rate" sx={{ height: "30px" }}>
-        <Typography variant="h6" component="div">
-          Exchange Rate :
-        </Typography>
-        <Typography variant="h5" component="div" sx={{ fontSize: "20px" }}>
-          1 ETH = 3000{currency}
-        </Typography>
-      </Box>
+      {inputEthPrice !== 0.0 && (
+        <Box component="div" className="rate" sx={{ height: "30px" }}>
+          <Typography variant="h6" component="div">
+            Exchange Rate :
+          </Typography>
+          <Typography variant="h5" component="div" sx={{ fontSize: "20px" }}>
+            {inputEthPrice} ETH = 3000{currency}
+          </Typography>
+        </Box>
+      )}
       {currentAccount ? (
         <Button
           variant="contained"
@@ -291,12 +311,14 @@ const GetPrice = async () => {
   };
 };
 const renderPrice = async () => {
-  const priceData = await GetPrice();
+  priceData = await GetPrice();
   console.dir(priceData);
+  return priceData;
 };
 
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState(null);
+
   const CheckWalletIsConnected = async () => {
     console.log("currentAccount: ", currentAccount);
     try {
@@ -347,6 +369,7 @@ const App = () => {
       <CustomizedInputs
         currentAccount={currentAccount}
         connectWallet={connectWallet}
+        priceData={priceData}
       />
       <Footer currentAccount={currentAccount} />
     </Box>
