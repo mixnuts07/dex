@@ -294,14 +294,14 @@ const GetPrice = async () => {
       "https://api.coingecko.com/api/v3/simple/price?ids=dai&vs_currencies=eth"
     )
   ).json();
-  const compData = await (
-    await fetch(
-      "https://api.coingecko.com/api/v3/simple/price?ids=compound-governance-token&vs_currencies=eth"
-    )
-  ).json();
   const linkData = await (
     await fetch(
       "https://api.coingecko.com/api/v3/simple/price?ids=chainlink&vs_currencies=eth"
+    )
+  ).json();
+  const compData = await (
+    await fetch(
+      "https://api.coingecko.com/api/v3/simple/price?ids=compound-governance-token&vs_currencies=eth"
     )
   ).json();
   return {
@@ -310,57 +310,61 @@ const GetPrice = async () => {
     compETH: compData["compound-governance-token"].eth,
   };
 };
-const renderPrice = async () => {
-  priceData = await GetPrice();
-  console.dir(priceData);
-  return priceData;
-};
 
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState(null);
-
+  // APIで取得したオブジェクトを格納
+  const [getApiPrice, setGetApiPrice] = useState({});
+  const RenderPrice = async () => {
+    priceData = await GetPrice();
+    console.log("RenderPrice");
+    console.dir(priceData);
+    setGetApiPrice(priceData);
+    console.log("priceDate");
+    console.log(priceData);
+  };
+  // ユーザがWalletを所要しているか確認
   const CheckWalletIsConnected = async () => {
-    console.log("currentAccount: ", currentAccount);
     try {
       const { ethereum } = window;
       if (!ethereum) {
-        console.log("Make sure you have MetaMask!");
+        console.log("MetaMaskをインストールして下さい。");
         return;
-      } else {
-        console.log("We have the ethereum object", ethereum);
       }
-      // ユーザーのウォレットへのアクセスが許可されているかどうかを確認します。
+      // ユーザのWalletへのアクセスが許可されているか確認
       const accounts = await ethereum.request({ method: "eth_accounts" });
       if (accounts.length !== 0) {
         const account = accounts[0];
-        console.log("Found an authorized account:", account);
+        console.log("認証済みのアカウントが確認されました。:", account);
         setCurrentAccount(account);
       } else {
-        console.log("No authorized account found");
+        console.log("認証済みのアカウントが確認されません。");
       }
     } catch (error) {
       console.log(error);
     }
   };
-  // connectWalletメソッドを実装
+  // MetaMaskに接続する関数
   const connectWallet = async () => {
     try {
       const { ethereum } = window;
       if (!ethereum) {
-        alert("Get MetaMask!");
+        alert("MetaMaskをインストールして下さい。");
         return;
       }
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
-      console.log("Connected: ", accounts[0]);
+      console.log("MetaMaskに接続されました。: ", accounts[0]);
       setCurrentAccount(accounts[0]);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
-    renderPrice();
+    RenderPrice();
+    // console.log("priceData");
+    // console.dir(priceData);
     CheckWalletIsConnected();
   }, []);
   return (
@@ -372,6 +376,13 @@ const App = () => {
         priceData={priceData}
       />
       <Footer currentAccount={currentAccount} />
+      <Box component="ul">
+        {Object.keys(getApiPrice).map((key) => (
+          <Box component="li" key={key}>
+            {getApiPrice[key]}
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 };
