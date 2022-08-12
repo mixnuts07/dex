@@ -154,14 +154,17 @@ const CustomizedInputs = ({
   const handleCurrency = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrency(event.target.value);
   };
-  const [inputEthPrice, setInputEthPrice] = useState(0.0);
-  const [inputTokenPrice, setInputTokenPrice] = useState(0.0);
+  const [inputEthPrice, setInputEthPrice] = useState(0);
+  const [inputTokenPrice, setInputTokenPrice] = useState(0);
   // トークンをレンダーする
   const TokenRender = () => {
     switch (currency) {
       case "DAI":
         return (
-          <Box component="h5">
+          <Box
+            component="h5"
+            sx={{ marginTop: "0", fontSize: "20px", color: "red" }}
+          >
             {Math.floor(
               (inputEthPrice / Number(getApiPrice["daiETH"])) * 1000
             ) / 1000}
@@ -169,7 +172,10 @@ const CustomizedInputs = ({
         );
       case "LINK":
         return (
-          <Box component="h5">
+          <Box
+            component="h5"
+            sx={{ marginTop: "0", fontSize: "20px", color: "red" }}
+          >
             {Math.floor(
               (inputEthPrice / Number(getApiPrice["linkETH"])) * 1000
             ) / 1000}
@@ -177,7 +183,10 @@ const CustomizedInputs = ({
         );
       case "COMP":
         return (
-          <Box component="h5">
+          <Box
+            component="h5"
+            sx={{ marginTop: "0", fontSize: "20px", color: "red" }}
+          >
             {Math.floor(
               (inputEthPrice / Number(getApiPrice["compETH"])) * 1000
             ) / 1000}
@@ -267,22 +276,31 @@ const CustomizedInputs = ({
           <EthToken />
         )}
       </Box>
-      {inputEthPrice !== 0.0 && (
-        <Box component="div" className="rate" sx={{ height: "30px" }}>
+      {inputEthPrice !== 0 && currency && (
+        <Box
+          component="div"
+          className="rate"
+          sx={{ height: "30px", marginTop: "30px", marginBottom: "0" }}
+        >
           <Typography variant="h6" component="div">
-            Exchange Rate :
+            Exchange Rate
           </Typography>
           <Box component="div">
             <Typography
-              variant="h5"
+              variant="h6"
               component="div"
               sx={{
                 fontSize: "20px",
                 display: "flex",
                 flexDirection: "row",
+                letterSpacing: "4px",
               }}
             >
-              {inputEthPrice} ETH = <TokenRender />
+              <Box component="div" sx={{ color: "red" }}>
+                {inputEthPrice}
+              </Box>
+              ETH=
+              <TokenRender />
               {currency}
             </Typography>
           </Box>
@@ -305,7 +323,7 @@ const CustomizedInputs = ({
           sx={{
             width: "200px",
             height: "200px",
-            marginTop: "60px",
+            marginTop: "0",
           }}
           onClick={connectWallet}
         >

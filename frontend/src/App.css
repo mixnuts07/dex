@@ -71,6 +71,7 @@ header {
   width: 25vw;
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-direction: column;
   color: whitesmoke;
 }
