@@ -49,15 +49,25 @@ const CssTextField = styled(TextField)({
   },
 });
 
-const Header = () => {
+const Header = ({ currentAccount, connectWallet }) => {
   return (
     <Box component="header">
       <Box component="h3" className="header-title">
         TOKEN SWAP
       </Box>
-      <Button className="connect-wallet" variant="contained">
-        Connect Wallet
-      </Button>
+      {currentAccount ? (
+        <Button className="connect-wallet" variant="contained" disabled>
+          Connected!!
+        </Button>
+      ) : (
+        <Button
+          className="connect-wallet"
+          variant="contained"
+          onClick={connectWallet}
+        >
+          Connect Wallet
+        </Button>
+      )}
     </Box>
   );
 };
@@ -125,7 +135,7 @@ const SelectTextFields = ({ currency, handleCurrency }) => {
   );
 };
 
-const CustomizedInputs = ({ connectWallet, currentAccount }) => {
+const CustomizedInputs = ({ currentAccount, connectWallet }) => {
   const [token, setToken] = useState(true);
   const handleToken = () => {
     setToken(!token);
@@ -165,7 +175,7 @@ const CustomizedInputs = ({ connectWallet, currentAccount }) => {
         <CssTextField
           label="0.00"
           id="custom-css-outlined-input"
-          sx={{ minWidth: "24vw", backgroundColor: "rgb(256,00,00)" }}
+          sx={{ minWidth: "24vw" }}
         />
         {token ? (
           <EthToken />
@@ -219,17 +229,30 @@ const CustomizedInputs = ({ connectWallet, currentAccount }) => {
           1 ETH = 3000{currency}
         </Typography>
       </Box>
-      <Button
-        variant="contained"
-        onClick={connectWallet}
-        sx={{
-          width: "200px",
-          height: "200px",
-          marginTop: "0",
-        }}
-      >
-        Connect Wallet
-      </Button>
+      {currentAccount ? (
+        <Button
+          variant="contained"
+          sx={{
+            width: "200px",
+            height: "200px",
+            marginTop: "0",
+          }}
+        >
+          Enter Amount
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          sx={{
+            width: "200px",
+            height: "200px",
+            marginTop: "0",
+          }}
+          onClick={connectWallet}
+        >
+          Connect Wallet
+        </Button>
+      )}
     </Box>
   );
 };
@@ -238,15 +261,43 @@ const Footer = ({ currentAccount }) => {
   return (
     <Box component="footer" sx={{ marginTop: "3em" }}>
       <Box component="h5" className="wallet">
-        LOGIN ADDRESS : {currentAccount}
+        LOGIN ADDRESS :<br /> {currentAccount}
       </Box>
     </Box>
   );
 };
 
+// ロード時にAPIの値段取得
+const GetPrice = async () => {
+  const daiData = await (
+    await fetch(
+      "https://api.coingecko.com/api/v3/simple/price?ids=dai&vs_currencies=eth"
+    )
+  ).json();
+  const compData = await (
+    await fetch(
+      "https://api.coingecko.com/api/v3/simple/price?ids=compound-governance-token&vs_currencies=eth"
+    )
+  ).json();
+  const linkData = await (
+    await fetch(
+      "https://api.coingecko.com/api/v3/simple/price?ids=chainlink&vs_currencies=eth"
+    )
+  ).json();
+  return {
+    daiETH: daiData.dai.eth,
+    linkETH: linkData.chainlink.eth,
+    compETH: compData["compound-governance-token"].eth,
+  };
+};
+const renderPrice = async () => {
+  const priceData = await GetPrice();
+  console.dir(priceData);
+};
+
 const App = () => {
-  const [currentAccount, setCurrentAccount] = useState("");
-  const checkIfWalletIsConnected = async () => {
+  const [currentAccount, setCurrentAccount] = useState(null);
+  const CheckWalletIsConnected = async () => {
     console.log("currentAccount: ", currentAccount);
     try {
       const { ethereum } = window;
@@ -287,14 +338,15 @@ const App = () => {
     }
   };
   useEffect(() => {
-    checkIfWalletIsConnected();
+    renderPrice();
+    CheckWalletIsConnected();
   }, []);
   return (
     <Box component="div" className="content">
-      <Header />
+      <Header connectWallet={connectWallet} currentAccount={currentAccount} />
       <CustomizedInputs
-        connectWallet={connectWallet}
         currentAccount={currentAccount}
+        connectWallet={connectWallet}
       />
       <Footer currentAccount={currentAccount} />
     </Box>
