@@ -12,6 +12,7 @@ import imageDai from "./Images/DAI.png";
 import imageLink from "./Images/link.png";
 import imageComp from "./Images/comp.png";
 import { ethers } from "ethers";
+import abi from "./abi.json";
 
 let priceData;
 // --
@@ -50,6 +51,13 @@ const CssTextField = styled(TextField)({
   },
 });
 
+// Contractアドレス
+const dexAddr = "0xA0D7221Ae415Fc97911DEEb562b135839Df4Dc8e";
+const daiAddr = "0x69e6Bb3Ea957Ef5e8050CaC8042eb663A04A0748";
+const compAddr = "0x3C17F760095C40F7E836174DEF5D1B2249e7Ea58";
+const linkAddr = "0xAF5537A619a75C41908BbdaA136c8502dd29D7F6";
+let dex;
+let tokenAddr;
 // 選択したトークンを保存〜〜
 // let selectedToken = undefined
 
@@ -297,7 +305,7 @@ const CustomizedInputs = ({
               }}
             >
               <Box component="div" sx={{ color: "red" }}>
-                {inputEthPrice}
+                {inputEthPrice.toFixed(7)}
               </Box>
               ETH=
               <TokenRender />
@@ -421,6 +429,11 @@ const App = () => {
       console.log(error);
     }
   };
+  // contractとの連携
+  const { ethereum } = window;
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
+  const wavePortalContract = new ethers.Contract(dexAddr, abi.dex, signer);
   useEffect(() => {
     RenderPrice();
     CheckWalletIsConnected();
