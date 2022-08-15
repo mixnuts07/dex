@@ -2,54 +2,19 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import imageEth from "./Images/ETH.png";
-import imageDai from "./Images/DAI.png";
-import imageLink from "./Images/link.png";
-import imageComp from "./Images/comp.png";
+// import imageDai from "./Images/DAI.png";
+// import imageLink from "./Images/link.png";
+// import imageComp from "./Images/comp.png";
 import { ethers } from "ethers";
 import abi from "./abi.json";
 
-let priceData;
-// --
-const currencies = [
-  {
-    value: "DAI",
-    label: "DAI",
-  },
-  {
-    value: "LINK",
-    label: "LINK",
-  },
-  {
-    value: "COMP",
-    label: "COMP",
-  },
-];
-
-const CssTextField = styled(TextField)({
-  "& label.Mui-focused": {
-    color: "green",
-  },
-  "& .MuiInput-underline:after": {
-    borderBottomColor: "green",
-  },
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: "whitesmoke",
-    },
-    "&:hover fieldset": {
-      borderColor: "whitesmoke",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "green",
-    },
-  },
-});
+import Header from "./components/Header"
+import Footer from "./components/Footer"
+import SelectTextFields from "./components/SelectTextField";
+import CssTextField from "./components/CssTextField";
 
 // Contractアドレス
 const dexAddr = "0xA0D7221Ae415Fc97911DEEb562b135839Df4Dc8e";
@@ -58,31 +23,8 @@ const compAddr = "0x3C17F760095C40F7E836174DEF5D1B2249e7Ea58";
 const linkAddr = "0xAF5537A619a75C41908BbdaA136c8502dd29D7F6";
 let dex;
 let tokenAddr;
-// 選択したトークンを保存〜〜
-// let selectedToken = undefined
 
-const Header = ({ currentAccount, connectWallet }) => {
-  return (
-    <Box component="header">
-      <Box component="h3" className="header-title">
-        TOKEN SWAP
-      </Box>
-      {currentAccount ? (
-        <Button className="connect-wallet" variant="contained" disabled>
-          Connected!!
-        </Button>
-      ) : (
-        <Button
-          className="connect-wallet"
-          variant="contained"
-          onClick={connectWallet}
-        >
-          Connect Wallet
-        </Button>
-      )}
-    </Box>
-  );
-};
+
 const ImageCrypto = () => {
   return (
     <Avatar alt="ETH Image" src={imageEth} sx={{ width: 56, height: 56 }} />
@@ -111,42 +53,7 @@ const EthToken = () => {
     </Box>
   );
 };
-const SelectTextFields = ({ currency, handleCurrency }) => {
-  return (
-    <Box
-      component="form"
-      sx={{
-        "& .MuiTextField-root": {
-          m: 1,
-          width: "8vw",
-          height: "3vh",
-          bottom: "8px",
-          marginLeft: "1em",
-        },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <div>
-        <CssTextField
-          id="outlined-select-currency"
-          select
-          label="Select"
-          value={currency}
-          onChange={handleCurrency}
-          // helperText="Please select your currency"
-        >
-          {currencies.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </CssTextField>
-      </div>
-      {/* <Box component="h5">{selectedToken}</Box> */}
-    </Box>
-  );
-};
+
 
 const CustomizedInputs = ({
   currentAccount,
@@ -349,15 +256,7 @@ const CustomizedInputs = ({
   );
 };
 
-const Footer = ({ currentAccount }) => {
-  return (
-    <Box component="footer" sx={{ marginTop: "3em" }}>
-      <Box component="h5" className="wallet">
-        LOGIN ADDRESS :<br /> {currentAccount}
-      </Box>
-    </Box>
-  );
-};
+
 
 // ロード時にAPIの値段取得
 const GetPrice = async () => {
@@ -387,6 +286,7 @@ const App = () => {
   const [currentAccount, setCurrentAccount] = useState(null);
   // APIで取得したオブジェクトを格納
   const [getApiPrice, setGetApiPrice] = useState({});
+  let priceData;
   const RenderPrice = async () => {
     priceData = await GetPrice();
     setGetApiPrice(priceData);
