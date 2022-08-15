@@ -391,8 +391,8 @@ const App = () => {
     priceData = await GetPrice();
     setGetApiPrice(priceData);
   };
-  // ユーザがWalletを所要しているか確認
-  const CheckWalletIsConnected = async () => {
+  // ユーザがWalletを所有しているか確認
+  const CheckUserOwnWallet = async () => {
     try {
       const { ethereum } = window;
       if (!ethereum) {
@@ -436,7 +436,7 @@ const App = () => {
   const wavePortalContract = new ethers.Contract(dexAddr, abi.dex, signer);
   useEffect(() => {
     RenderPrice();
-    CheckWalletIsConnected();
+    CheckUserOwnWallet();
   }, []);
   return (
     <Box component="div" className="content">
