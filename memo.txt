@@ -70,7 +70,7 @@ migrate
 migrate --reset
 --
 
---
+---
 test.js をテストするコマンド
 test
---
+---
