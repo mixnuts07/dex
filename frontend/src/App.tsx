@@ -449,7 +449,7 @@ const App = () => {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
     const DexContract = new ethers.Contract(dexAddr, abi.dex, signer);
-    const count = await DexContract.buyToken(daiAddr, 1, 1);
+    let count = await DexContract.buyToken(daiAddr, 10000000000, 10000000000);
     console.log(count);
   };
   useEffect(() => {
