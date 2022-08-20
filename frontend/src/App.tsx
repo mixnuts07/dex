@@ -153,6 +153,7 @@ const CustomizedInputs = ({
   connectWallet,
   priceData,
   getApiPrice,
+  buyToken,
 }) => {
   const [token, setToken] = useState(true);
   const handleToken = () => {
@@ -322,6 +323,7 @@ const CustomizedInputs = ({
             height: "200px",
             marginTop: "0",
           }}
+          onClick={buyToken}
         >
           Enter Amount
         </Button>
@@ -394,6 +396,7 @@ const App = () => {
   // ユーザがWalletを所有しているか確認
   const CheckUserOwnWallet = async () => {
     try {
+      // userがmetaMaskを繋げるとEthereumAPIが利用可能になる
       const { ethereum } = window;
       if (!ethereum) {
         console.log("MetaMaskをインストールして下さい。");
@@ -430,10 +433,25 @@ const App = () => {
     }
   };
   // contractとの連携
-  const { ethereum } = window;
-  const provider = new ethers.providers.Web3Provider(ethereum);
-  const signer = provider.getSigner();
-  const wavePortalContract = new ethers.Contract(dexAddr, abi.dex, signer);
+  const DaiBalanceOf = async () => {
+    const { ethereum } = window;
+    const provider = new ethers.providers.Web3Provider(ethereum);
+    const signer = provider.getSigner();
+    const DexContract = new ethers.Contract(dexAddr, abi.dex, signer);
+    const DaiContract = new ethers.Contract(daiAddr, abi.token, signer);
+    let daiBalanceOf = await DaiContract.balanceOf(currentAccount);
+
+    console.log("daiBalanceOf");
+    console.log(daiBalanceOf);
+  };
+  const buyToken = async () => {
+    const { ethereum } = window;
+    const provider = new ethers.providers.Web3Provider(ethereum);
+    const signer = provider.getSigner();
+    const DexContract = new ethers.Contract(dexAddr, abi.dex, signer);
+    const count = await DexContract.buyToken(daiAddr, 1, 1);
+    console.log(count);
+  };
   useEffect(() => {
     RenderPrice();
     CheckUserOwnWallet();
@@ -446,8 +464,10 @@ const App = () => {
         connectWallet={connectWallet}
         priceData={priceData}
         getApiPrice={getApiPrice}
+        buyToken={buyToken}
       />
       <Footer currentAccount={currentAccount} />
+      <button onClick={DaiBalanceOf}>CLICK</button>
     </Box>
   );
 };
