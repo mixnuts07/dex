@@ -447,10 +447,26 @@ const App = () => {
   const buyToken = async () => {
     const { ethereum } = window;
     const provider = new ethers.providers.Web3Provider(ethereum);
+    await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
-    const DexContract = new ethers.Contract(dexAddr, abi.dex, signer);
-    let count = await DexContract.buyToken(daiAddr, 10000000000, 10000000000);
+    const myAddress = await signer.getAddress();
+    const myBalance = await signer.getBalance();
+    console.log("myAddress");
+    console.log(myAddress);
+    console.log("myBalance");
+    console.log(ethers.utils.formatEther(myBalance));
+    const DexContract = new ethers.Contract(daiAddr, abi.dex, signer);
+    let count = await DexContract.buyToken(
+      dexAddr,
+      ethers.utils.parseEther("1.0"),
+      ethers.utils.parseEther("1.0")
+    );
     console.log(count);
+    const tx = signer.sendTransaction({
+      to: daiAddr,
+      value: ethers.utils.parseEther("1.0"),
+    });
+    console.log(tx);
   };
   useEffect(() => {
     RenderPrice();
